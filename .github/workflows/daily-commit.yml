@@ -2,7 +2,7 @@ name: Daily Commit Automation
 
 on:
   schedule:
-    - cron: "30 23 * * *"  # Runs daily at 23:30 UTC (Adjust as needed)
+    - cron: "30 23 * * *"  # Runs daily at 23:30 UTC
   workflow_dispatch: # Allows manual trigger
 
 jobs:
@@ -19,6 +19,10 @@ jobs:
           git config --global user.email "23f2004313@ds.study.iitm.ac.in"
           git add .
           git commit -m "Automated commit on $(date)"
-          git push
+
+      - name: Push changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/vedantko8/daily-commit-bot.git
+          git push origin main
         env:
-          GH_PAT: ${{ secrets.GHPAT }}  # Using the GitHub Secret
+          GH_PAT: ${{ secrets.GHPAT }}  # Ensure this is correctly named in your repository secrets
